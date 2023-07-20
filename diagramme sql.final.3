@@ -1,0 +1,149 @@
+/*==============================================================*/
+/* Nom de SGBD :  MySQL 5.0                                     */
+/* Date de création :  20/07/2023 11:10:04                      */
+/*==============================================================*/
+
+
+drop table if exists client;
+
+drop table if exists depenses;
+
+drop table if exists mesures;
+
+drop table if exists models;
+
+drop table if exists paiement;
+
+drop table if exists personnels;
+
+drop table if exists rendez_vous;
+
+drop table if exists utilisateur;
+
+/*==============================================================*/
+/* Table : client                                               */
+/*==============================================================*/
+create table client
+(
+   id_client            int not null,
+   nom                  varchar(254),
+   prenom               varchar(254),
+   adresse              varchar(254),
+   telephone            int,
+   primary key (id_client)
+);
+
+/*==============================================================*/
+/* Table : depenses                                             */
+/*==============================================================*/
+create table depenses
+(
+   id_depenses          int not null,
+   id_personnels        int not null,
+   achats_materiels     varchar(254),
+   depenses_effectuez   varchar(254),
+   date_sortie          datetime,
+   primary key (id_depenses)
+);
+
+/*==============================================================*/
+/* Table : mesures                                              */
+/*==============================================================*/
+create table mesures
+(
+   id_mesures           int not null,
+   id_personnels        int not null,
+   tour_de_poitrine     int,
+   tour_de_hanche       int,
+   longueur_pente_d_epaule int,
+   long_taille_pente    int,
+   long_genoux          int,
+   carrure_devant       int,
+   primary key (id_mesures)
+);
+
+/*==============================================================*/
+/* Table : models                                               */
+/*==============================================================*/
+create table models
+(
+   id_models            int not null,
+   id_client            int not null,
+   types_models         varchar(254),
+   primary key (id_models)
+);
+
+/*==============================================================*/
+/* Table : paiement                                             */
+/*==============================================================*/
+create table paiement
+(
+   id_paiement          int not null,
+   id_client            int not null,
+   avance               int,
+   date                 int,
+   primary key (id_paiement)
+);
+
+/*==============================================================*/
+/* Table : personnels                                           */
+/*==============================================================*/
+create table personnels
+(
+   id_personnels        int not null,
+   id_utilisateur       int not null,
+   nom                  varchar(254),
+   prenom               varchar(254),
+   adresse              varchar(254),
+   telephone            int,
+   email                varchar(254),
+   primary key (id_personnels)
+);
+
+/*==============================================================*/
+/* Table : rendez_vous                                          */
+/*==============================================================*/
+create table rendez_vous
+(
+   id_rendez_vous       int not null,
+   id_personnels        int not null,
+   date                 int,
+   heure                int,
+   primary key (id_rendez_vous),
+   key AK_Identifiant_1 (id_rendez_vous),
+   key AK_Identifiant_2 (id_rendez_vous)
+);
+
+/*==============================================================*/
+/* Table : utilisateur                                          */
+/*==============================================================*/
+create table utilisateur
+(
+   id_utilisateur       int not null,
+   nom                  varchar(254),
+   prenom               varchar(254),
+   roles                varchar(254),
+   telephone            int,
+   email                varchar(254),
+   primary key (id_utilisateur),
+   key AK_Identifiant_1 (id_utilisateur)
+);
+
+alter table depenses add constraint FK_Association_4 foreign key (id_personnels)
+      references personnels (id_personnels) on delete restrict on update restrict;
+
+alter table mesures add constraint FK_Association_2 foreign key (id_personnels)
+      references personnels (id_personnels) on delete restrict on update restrict;
+
+alter table models add constraint FK_Association_1 foreign key (id_client)
+      references client (id_client) on delete restrict on update restrict;
+
+alter table paiement add constraint FK_Association_5 foreign key (id_client)
+      references client (id_client) on delete restrict on update restrict;
+
+alter table personnels add constraint FK_Association_6 foreign key (id_utilisateur)
+      references utilisateur (id_utilisateur) on delete restrict on update restrict;
+
+alter table rendez_vous add constraint FK_Association_3 foreign key (id_personnels)
+      references personnels (id_personnels) on delete restrict on update restrict;
+
